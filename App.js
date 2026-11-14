@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useState} from 'react';
+import LoginPage from './screens/LoginPage';
+import SignupPage from './screens/SignupPage';
+import Dashboard from './screens/Dashboard';
+import AIPage from './screens/AIPage';
+import SettingsPage from './screens/SettingsPage';
+import TOSPage from "./screens/TOSPage";
+import PrivacyPolicyPage from "./screens/PrivacyPolicyPage";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const[user, setUser] = useState(null);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      {user === null ? (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="LoginPage">{(props)=>(
+          <LoginPage {...props} user={user} setUser={setUser}/>)}</Stack.Screen>
+          <Stack.Screen name="SignupPage" component={SignupPage}/>
+          <Stack.Screen name="TOSPage" component={TOSPage}/>
+          <Stack.Screen name="PrivacyPolicyPage" component={PrivacyPolicyPage}/>
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Dashboard">{(props)=>(
+          <Dashboard {...props} user={user}/>)}</Stack.Screen>
+          <Stack.Screen name="AIPage">{(props)=>(
+          <AIPage {...props} user={user} setUser={setUser}/>)}</Stack.Screen>
+          <Stack.Screen name="SettingsPage">{(props)=>(
+          <SettingsPage {...props} user={user} setUser={setUser}/>)}</Stack.Screen>
+          <Stack.Screen name="TOSPage" component={TOSPage}/>
+          <Stack.Screen name="PrivacyPolicyPage" component={PrivacyPolicyPage}/>
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
